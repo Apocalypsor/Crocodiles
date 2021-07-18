@@ -41,7 +41,7 @@ def main(cookie, validate):
                     break
                 time.sleep(0.1)
             sys.stdout.write('exchange()\n')
-            url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE&validate={validate}"
+            url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
             data = {"buyParam": {"orderSource": 'pet', "saleInfoId": bean['id']}, "deviceInfo": {}}
             res = requests.post(url, headers=headers, data=json.dumps(data)).json()
             sys.stdout.write(json.dumps(res, ensure_ascii=False) + '\n')
