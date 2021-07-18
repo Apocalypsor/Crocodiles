@@ -6,6 +6,8 @@ JD_JOY_REWARD_NAME = (
     int(os.getenv("JD_JOY_REWARD_NAME")) if os.getenv("JD_JOY_REWARD_NAME") else 500
 )
 
+COOKIES = os.getenv("JD_COOKIE").split('&') if os.getenv("JD_COOKIE") else []
+
 
 def USER_AGENT():
     USER_AGENTS = [

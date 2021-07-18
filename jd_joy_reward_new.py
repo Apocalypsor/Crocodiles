@@ -2,14 +2,16 @@
 50 59 7,15,23 * * * jd_joy_reward_new.py
 """
 
+import datetime
 import json
 import os
 import sys
 import threading
 import time
-import datetime
+
 import requests
-from jdUtils import JD_JOY_REWARD_NAME, USER_AGENT
+
+from jdUtils import COOKIES, JD_JOY_REWARD_NAME, USER_AGENT
 
 try:
     from sendNotify import send
@@ -73,8 +75,9 @@ if __name__ == "__main__":
     else:
         path = "."
     with open(f"{path}/validate.txt", encoding="utf-8") as f:
-        validates = f.read().split("\n")[:-1]
-    print(f"====================共{len(cookies)}个京东账号Cookie=========")
-    for i in range(min(len(validates), len(cookies))):
+        validates = f.read().split("\n")
+
+    print(f"====================共{len(COOKIES)}个京东账号Cookie=========")
+    for i in range(min(len(validates), len(COOKIES))):
         lock.acquire()
-        threading.Thread(target=main, args=(cookies[i], validates[i])).start()
+        threading.Thread(target=main, args=(COOKIES[i], validates[i])).start()
