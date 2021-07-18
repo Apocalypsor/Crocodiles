@@ -107,10 +107,10 @@ def USER_AGENT():
                 if re.search(r"\] *\n", line):
                     break
                 else:
-                    USER_AGENTS.append(line.rstrip(",").strip("'").strip('"'))
+                    USER_AGENTS.append(line.strip().rstrip(",").strip("'").strip('"'))
 
     return random.choice(USER_AGENTS)
 
 
 if __name__ == "__main__":
-    print(user_agent())
+    print(USER_AGENT())
