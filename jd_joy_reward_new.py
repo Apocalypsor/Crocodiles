@@ -22,7 +22,7 @@ def main(cookie, validate):
         'accept-language': 'zh-cn',
         'cookie': cookie
     }
-    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=NRp8OPxZMFXmGkaE&validate={validate}"
+    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
     tasks = requests.get(url, headers=headers).json()
     h = datetime.datetime.now().hour
     config = {}
