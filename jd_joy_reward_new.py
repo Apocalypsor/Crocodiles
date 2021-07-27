@@ -77,6 +77,15 @@ if __name__ == "__main__":
     with open(f"{path}/validate.txt", encoding="utf-8") as f:
         validates = f.read().split("\n")
 
+    if os.getenv("JOY_BEAN_PINS"):
+        validate_pins = os.getenv("JOY_BEAN_PINS").split(",")
+        tmp_cookies = []
+        for c in COOKIES:
+            if c.split("pt_pin=")[-1].rstrip().rstrip(";") in validate_pins:
+                tmp_cookies.append("c")
+
+        COOKIES = tmp_cookies
+
     print(f"====================共{len(COOKIES)}个京东账号Cookie=========")
     for i in range(min(len(validates), len(COOKIES))):
         lock.acquire()
