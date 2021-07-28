@@ -1,3 +1,4 @@
 .env
 USER_AGENTS.js
 /.DS_Store
+/validate.txt

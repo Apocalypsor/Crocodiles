@@ -1,3 +1,5 @@
+# _*_ coding:utf-8 _*_
+
 """
 50 59 7,15,23 * * * jd_joy_reward_new.py
 """
@@ -6,12 +8,13 @@ import datetime
 import json
 import os
 import sys
-import threading
 import time
 
 import requests
 
-from jdUtils import COOKIES, JD_JOY_REWARD_NAME, USER_AGENT
+from multiprocessing import Pool
+
+from jdUtils import COOKIES, JD_JOY_REWARD_NAME, printT, USER_AGENT
 
 try:
     from sendNotify import send
@@ -19,7 +22,11 @@ except:
     from jdSendNotify import send
 
 
-def main(cookie, validate):
+def main(cookie_tuple):
+    cookie, validate = cookie_tuple
+
+    account_name = cookie.split("pt_pin=")[-1].strip(";")
+
     headers = {
         "Host": "jdjoy.jd.com",
         "accept": "*/*",
@@ -30,50 +37,68 @@ def main(cookie, validate):
         "accept-language": "zh-cn",
         "cookie": cookie,
     }
-    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
-    tasks = requests.get(url, headers=headers).json()
-    h = datetime.datetime.now().hour
-    config = {}
-    if 0 <= h < 8:
-        config = tasks["data"]["beanConfigs0"]
-    if 8 <= h < 16:
-        config = tasks["data"]["beanConfigs8"]
-    if 16 <= h < 24:
-        config = tasks["data"]["beanConfigs16"]
 
-    for bean in config:
-        sys.stdout.write(f"{bean['id']} {bean['giftName']} {bean['leftStock']}\n")
-        if bean["giftValue"] == JD_JOY_REWARD_NAME:
-            while 1:
-                if datetime.datetime.now().second < 30:
-                    break
-                time.sleep(0.1)
-            sys.stdout.write("exchange()\n")
-            url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
-            data = {
-                "buyParam": {"orderSource": "pet", "saleInfoId": bean["id"]},
-                "deviceInfo": {},
-            }
-            res = requests.post(url, headers=headers, data=json.dumps(data)).json()
-            sys.stdout.write(json.dumps(res, ensure_ascii=False) + "\n")
-            if res["errorCode"] == "buy_success":
-                sys.stdout.write(
-                    f"cookie{cookie.split('pt_pin=')[1].replace(';', '')}兑换成功\n"
+    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
+
+    tasks = requests.get(url, headers=headers).json()
+
+    if not tasks["errorMessage"]:
+        h = datetime.datetime.now().hour
+        config = {}
+        if 0 <= h < 8:
+            config = tasks["data"]["beanConfigs0"]
+        if 8 <= h < 16:
+            config = tasks["data"]["beanConfigs8"]
+        if 16 <= h < 24:
+            config = tasks["data"]["beanConfigs16"]
+
+        for bean in config:
+            printT(
+                f"账号{account_name}库存信息: {bean['giftName']}({bean['id']})剩余{bean['leftStock']}\n"
+            )
+            if bean["giftValue"] == JD_JOY_REWARD_NAME:
+                while 1:
+                    if datetime.datetime.now().second < 30:
+                        break
+                    time.sleep(0.1)
+
+                printT(f"账号{account_name}: 开始兑换!\n")
+
+                url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
+                data = {
+                    "buyParam": {"orderSource": "pet", "saleInfoId": bean["id"]},
+                    "deviceInfo": {},
+                }
+
+                res = requests.post(url, headers=headers, data=json.dumps(data)).json()
+                printT(
+                    f"账号{account_name}兑换信息: "
+                    + str(json.dumps(res, ensure_ascii=False))
+                    + "\n"
                 )
-                send(
-                    "宠汪汪兑换Pro",
-                    f"Cookie {cookie.split('pt_pin=')[1].replace(';', '')} 兑换成功 {JD_JOY_REWARD_NAME}",
-                )
-    lock.release()
+                if res["errorCode"] == "buy_success":
+                    send(
+                        "宠汪汪兑换Pro",
+                        f"账号{cookie.split('pt_pin=')[1].replace(';', '')}兑换成功: {JD_JOY_REWARD_NAME}豆",
+                    )
+
+    else:
+        error_message = tasks["errorMessage"]
+
+        send(
+            "宠汪汪兑换Pro",
+            f"账号{account_name}兑换出错: {error_message}",
+        )
 
 
 if __name__ == "__main__":
-    print("🔔宠汪汪兑换Pro,开始！")
-    lock = threading.BoundedSemaphore(20)
+    printT("🔔宠汪汪兑换Pro,开始！")
+
     if "test" in os.getcwd():
         path = ".."
     else:
         path = "."
+
     with open(f"{path}/validate.txt", encoding="utf-8") as f:
         validates = f.read().split("\n")
 
@@ -86,7 +111,11 @@ if __name__ == "__main__":
 
         COOKIES = tmp_cookies
 
-    print(f"====================共{len(COOKIES)}个京东账号Cookie=========")
-    for i in range(min(len(validates), len(COOKIES))):
-        lock.acquire()
-        threading.Thread(target=main, args=(COOKIES[i], validates[i])).start()
+    valid_account = min(len(COOKIES), len(validates))
+
+    printT(f"=============共{valid_account}个有效京东账号及验证码=============")
+
+    mix_input = [(COOKIES[i], validates[i]) for i in range(valid_account)]
+
+    with Pool(valid_account) as p:
+        p.map(main, mix_input)

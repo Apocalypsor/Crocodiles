@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
 
-import os
-import re
 import sys
+import os, re
 
 cur_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(cur_path)[0]
@@ -15,6 +14,8 @@ import hmac
 import hashlib
 import base64
 import urllib.parse
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 # 通知服务
 BARK = ""  # bark服务,自行搜索; secrets可填;
