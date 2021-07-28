@@ -107,13 +107,13 @@ if __name__ == "__main__":
         tmp_cookies = []
         for c in COOKIES:
             if c.split("pt_pin=")[-1].rstrip().rstrip(";") in validate_pins:
-                tmp_cookies.append("c")
+                tmp_cookies.append(c)
 
         COOKIES = tmp_cookies
 
     valid_account = min(len(COOKIES), len(validates))
 
-    printT(f"=============共{valid_account}个有效京东账号及验证码=============")
+    printT(f"共{valid_account}个有效京东账号及验证码")
 
     mix_input = [(COOKIES[i], validates[i]) for i in range(valid_account)]
 

@@ -12,7 +12,7 @@ COOKIES = os.getenv("JD_COOKIE").split("&") if os.getenv("JD_COOKIE") else []
 
 
 def printT(s):
-    print("[{0}]: {1}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s))
+    sys.stdout.write("[{0}]: {1}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s))
     sys.stdout.flush()
 
 
