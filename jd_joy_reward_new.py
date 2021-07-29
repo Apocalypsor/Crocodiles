@@ -14,12 +14,16 @@ import requests
 
 from multiprocessing import Pool
 
-from jdUtils import COOKIES, JD_JOY_REWARD_NAME, printT, USER_AGENT
+from jdUtils import COOKIES, printT, USER_AGENT
 
 try:
     from sendNotify import send
 except:
     from jdSendNotify import send
+
+JD_JOY_REWARD_NAME = (
+    int(os.getenv("JD_JOY_REWARD_NAME")) if os.getenv("JD_JOY_REWARD_NAME") else 500
+)
 
 
 def main(cookie_tuple):

@@ -4,15 +4,13 @@ import random
 import re
 import sys
 
-JD_JOY_REWARD_NAME = (
-    int(os.getenv("JD_JOY_REWARD_NAME")) if os.getenv("JD_JOY_REWARD_NAME") else 500
-)
-
 COOKIES = os.getenv("JD_COOKIE").split("&") if os.getenv("JD_COOKIE") else []
 
 
 def printT(s):
-    sys.stdout.write("[{0}]: {1}\n".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s))
+    sys.stdout.write(
+        "[{0}]: {1}\n".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s)
+    )
     sys.stdout.flush()
 
 
