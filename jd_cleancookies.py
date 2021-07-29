@@ -55,7 +55,7 @@ def putEnv(token, env):
     }
 
     resp = requests.put(
-        api_endpoint, headers=headers, data=json.dumps(put_data, ensure_ascii=False)
+        api_endpoint, headers=headers, data=json.dumps(put_data, ensure_ascii=False).encode('utf-8')
     ).json()
     if resp["code"] == 200:
         return True
