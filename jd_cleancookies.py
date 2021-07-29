@@ -1,7 +1,7 @@
 # _*_ coding:utf-8 _*_
 
 """
-23 * * * * jd_joy_reward_new.py
+23 * * * * jd_cleancookies.py
 """
 
 import json
