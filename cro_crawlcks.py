@@ -49,6 +49,8 @@ def main(token):
                         and d["value"] not in jd_cookies
                         and checkCookie(d["value"])
                     ):
+                        jd_cookies.append(d["value"])
+
                         ck_name = d["value"].split("pt_pin=")[-1].rstrip(";")
                         send("自动爬取Cookie", f"自动添加有效Cookie: {ck_name}")
                         new_cookies += "&" + d["value"]
@@ -56,9 +58,9 @@ def main(token):
         if cookies_env["value"].rstrip("&") != new_cookies:
             cookies_env["value"] = new_cookies
             if putEnv(token, cookies_env):
-                printT("自动替换Cookie成功 (" + cookies["remarks"] + ")")
+                printT("自动替换Cookie成功 (" + cookies_env["remarks"] + ")")
             else:
-                printT("自动替换Cookie失败 (" + cookies["remarks"] + ")")
+                printT("自动替换Cookie失败 (" + cookies_env["remarks"] + ")")
 
 
 if __name__ == "__main__":
