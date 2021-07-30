@@ -1,8 +1,17 @@
 # _*_ coding:utf-8 _*_
 
+import json
+import os
+import re
+
 import requests
 
-from jdUtils import checkCookie, putEnv
+from jdUtils import checkCookie, getEnvs, putEnv, printT
+
+try:
+    from sendNotify import send
+except:
+    from jdSendNotify import send
 
 
 def main(token):
@@ -21,7 +30,7 @@ def main(token):
                 cookies_env = e
                 break
 
-        jd_cookies = os.getenv("JD_COOKIE").slpit("&")
+        jd_cookies = os.getenv("JD_COOKIE").split("&")
         new_cookies = cookies_env["value"].rstrip("&")
 
         urls = []
@@ -30,6 +39,7 @@ def main(token):
                 urls.append(os.environ[env])
 
         for u in urls:
+            printT(f"开始爬取{u}")
             resp = requests.get(u).json()
 
             if resp.get("data"):
