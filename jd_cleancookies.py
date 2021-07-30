@@ -7,78 +7,13 @@
 import json
 import os
 import re
-import time
 
-import requests
-
-from jdUtils import printT, USER_AGENT
+from jdUtils import checkCookie, getEnvs, putEnv, printT
 
 try:
     from sendNotify import send
 except:
     from jdSendNotify import send
-
-
-def getEnvs(token):
-    api_endpoint = "http://localhost:5600/api/envs?t=" + str(int(time.time()))
-    headers = {
-        "Accept": "application/json",
-        "Authorization": "Bearer " + token,
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
-        "Content-Type": "application/json;charset=UTF-8",
-        "Origin": "http://localhost:5700",
-        "Referer": "http://localhost:5700/env",
-        "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-    }
-
-    envs = requests.get(api_endpoint, headers=headers).json()
-
-    return envs
-
-
-def putEnv(token, env):
-    put_data = {
-        "name": env["name"],
-        "remarks": env["remarks"],
-        "value": env["value"],
-        "_id": env["_id"],
-    }
-    api_endpoint = "http://localhost:5600/api/envs?t=" + str(int(time.time()))
-    headers = {
-        "Accept": "application/json",
-        "Authorization": "Bearer " + token,
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36",
-        "Content-Type": "application/json;charset=UTF-8",
-        "Origin": "http://localhost:5700",
-        "Referer": "http://localhost:5700/env",
-        "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-    }
-
-    resp = requests.put(
-        api_endpoint, headers=headers, data=json.dumps(put_data, ensure_ascii=False).encode('utf-8')
-    ).json()
-    if resp["code"] == 200:
-        return True
-    return False
-
-
-def checkCookie(cookie):
-    url = "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion"
-    headers = {
-        "Host": "me-api.jd.com",
-        "Accept": "*/*",
-        "Connection": "keep-alive",
-        "Cookie": cookie,
-        "User-Agent": USER_AGENT(),
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br",
-    }
-    res = requests.get(url, headers=headers)
-    data = res.json()
-    if data["retcode"] == "1001":
-        return False
-    return True
 
 
 def main(token):
