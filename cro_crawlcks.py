@@ -1,5 +1,9 @@
 # _*_ coding:utf-8 _*_
 
+"""
+19 * * * * cro_crawlcks.py
+"""
+
 import json
 import os
 import re
@@ -39,7 +43,7 @@ def main(token):
                 urls.append(os.environ[env])
 
         for u in urls:
-            printT(f"开始爬取{u}")
+            printT(f"开始爬取 {u}")
             resp = requests.get(u).json()
 
             if resp.get("data"):
