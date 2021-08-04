@@ -2,7 +2,7 @@
  * sk2店铺粉丝互动，需入会
  * 改自 GitHub@Wenmoux 7月互动的脚本
  * 活动地址：https://lzkjdz-isv.isvjd.com/wxFansInterActionActivity/activity/5a8aea7f27b84900a14624fe9dcc8fe1?activityId=5a8aea7f27b84900a14624fe9dcc8fe1
- * cron 47 10,17 jd_wxFans_sk2.js
+ * cron 47 10,17 * * * jd_wxFans_sk2.js
  */
 const $ = new Env('SK2店铺粉丝互动');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

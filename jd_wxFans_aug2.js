@@ -2,7 +2,7 @@
  * 8月粉丝互动
  * 改自 GitHub@Wenmoux 7月互动的脚本
  * 活动地址：https://lzkjdz-isv.isvjcloud.com/wxFansInterActionActivity/activity/3307706?activityId=162c43699ba945e8adb83b2bd5fe0142
- * cron 13 9,14 jd_wxFans_aug2.js
+ * cron 13 9,14 * * * jd_wxFans_aug2.js
  */
 const $ = new Env('八月粉丝互动-容声冰箱洗衣机自营旗舰店');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
