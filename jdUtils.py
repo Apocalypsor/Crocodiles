@@ -74,9 +74,13 @@ def checkCookie(cookie):
     }
     res = requests.get(url, headers=headers)
     data = res.json()
-    if data["retcode"] == "1001":
+    try:
+        data = res.json()
+        if data["retcode"] == "1001":
+            return False
+        return True
+    except:
         return False
-    return True
 
 
 def getEnvs(token):
