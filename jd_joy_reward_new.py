@@ -42,7 +42,7 @@ def main(cookie_tuple):
         "cookie": cookie,
     }
 
-    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
+    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=ztmFUCxcPMNyUq0P&validate={validate}"
 
     tasks = requests.get(url, headers=headers).json()
 
@@ -68,7 +68,7 @@ def main(cookie_tuple):
 
                 printT(f"账号{account_name}: 开始兑换!\n")
 
-                url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=qRKHmL4sna8ZOP9F&validate={validate}"
+                url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=ztmFUCxcPMNyUq0P&validate={validate}"
                 data = {
                     "buyParam": {"orderSource": "pet", "saleInfoId": bean["id"]},
                     "deviceInfo": {},
