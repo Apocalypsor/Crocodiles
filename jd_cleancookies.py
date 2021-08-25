@@ -37,12 +37,15 @@ def main(token):
             cks = cookies["value"].split("&")
             valid_cks = []
             for c in cks:
-                if checkCookie(c):
+                try:
+                    if checkCookie(c):
+                        valid_cks.append(c)
+                    else:
+                        ck_name = c.split("pt_pin=")[-1].rstrip(";")
+                        printT(c + " 已失效")
+                        send("失效Cookie自动清理", f"Cookie {ck_name} 已失效")
+                except:
                     valid_cks.append(c)
-                else:
-                    ck_name = c.split("pt_pin=")[-1].rstrip(";")
-                    printT(c + " 已失效")
-                    send("失效Cookie自动清理", f"Cookie {ck_name} 已失效")
 
             if len(valid_cks) != len(cks):
                 printT("检测到Cookie失效 (" + cookies["remarks"] + ")")
