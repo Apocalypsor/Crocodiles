@@ -27,6 +27,8 @@ JD_JOY_REWARD_NAME = (
 
 
 def main(cookie_tuple):
+    invoke_key = RtKLB8euDo7KwsO0
+    
     cookie, validate = cookie_tuple
 
     account_name = cookie.split("pt_pin=")[-1].strip(";")
@@ -42,7 +44,7 @@ def main(cookie_tuple):
         "cookie": cookie,
     }
 
-    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey=ztmFUCxcPMNyUq0P&validate={validate}"
+    url = f"https://jdjoy.jd.com/common/gift/getBeanConfigs?reqSource=h5&invokeKey={invoke_key}&validate={validate}"
 
     tasks = requests.get(url, headers=headers).json()
 
@@ -68,7 +70,7 @@ def main(cookie_tuple):
 
                 printT(f"账号{account_name}: 开始兑换!\n")
 
-                url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey=ztmFUCxcPMNyUq0P&validate={validate}"
+                url = f"https://jdjoy.jd.com/common/gift/new/exchange?reqSource=h5&invokeKey={invoke_key}&validate={validate}"
                 data = {
                     "buyParam": {"orderSource": "pet", "saleInfoId": bean["id"]},
                     "deviceInfo": {},
