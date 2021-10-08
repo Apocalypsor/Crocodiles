@@ -7,6 +7,7 @@
 import datetime
 import json
 import os
+import re
 import sys
 import time
 
@@ -25,10 +26,12 @@ JD_JOY_REWARD_NAME = (
     int(os.getenv("JD_JOY_REWARD_NAME")) if os.getenv("JD_JOY_REWARD_NAME") else 500
 )
 
+remote_reward = requests.get("https://raw.githubusercontent.com/DovFork/jd-scripts/master/jd_joy_reward.ts").text
+
+invoke_key = re.search(r"&invokeKey=(\w+)&", remote_reward).group(1)
+
 
 def main(cookie_tuple):
-    invoke_key = RtKLB8euDo7KwsO0
-    
     cookie, validate = cookie_tuple
 
     account_name = cookie.split("pt_pin=")[-1].strip(";")
